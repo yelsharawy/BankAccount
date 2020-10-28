@@ -42,4 +42,18 @@ public class BankAccount {
         return this.password.equals(password);
     }
 
+    public boolean transferTo(BankAccount other, double amount, String password) {
+        // one-liner:
+        // return authenticate(password) && withdraw(amount) && other.deposit(amount);
+        if (authenticate(password) && withdraw(amount)) {
+            if (other.deposit(amount)) return true;
+            throw new AssertionError(
+                (deposit(amount) ?
+                    "CRITICAL ERROR: TRANSFER FAILED, REFUND SUCCEEDED" :
+                    "CRITICAL ERROR: TRANSFER FAILED, REFUND FAILED"
+                    ) + "\nFROM:\t" + this + "\nTO:\t" + other);
+        }
+        return false;
+    }
+
 }
